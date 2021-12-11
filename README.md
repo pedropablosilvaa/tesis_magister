@@ -1,5 +1,11 @@
 # tesis_magister
 
+Create environment especified in file enviroment.yml:
+```
+conda env create --file environment.yml
+```
 
-$ conda env create --file environment.yml
-$ conda activate risk_assess
+Activate environment
+```
+conda activate risk_assess
+```
