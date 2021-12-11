@@ -1,0 +1,9 @@
+name: risk_assess 
+channels:
+  - conda-forge
+dependencies:
+  - python=3.8
+  - numpy
+  - pandas
+  - psycopg2
+  - matplotlib
