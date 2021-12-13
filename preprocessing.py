@@ -15,7 +15,7 @@ from matplotlib.pyplot import figure
 from config import database_param
 import utils
 import argparse
-import sql_queryes.consultas_sql as consultas_sql
+import sql_queries.consultas_sql as consultas_sql
 
 pd.set_option('display.float_format', '{:.5f}'.format)
 database=database_param["database"]
@@ -25,9 +25,71 @@ host=database_param["host"]
 port=database_param["port"]
 
 parser = argparse.ArgumentParser(description='Preprocessing of spatial data')
-#parser.add_argument("--nodes", dest="nodes", required=True, type=str, help="'all' to calculate dPC for all nodes")
-#parser.add_argument("--n_chunks", dest="n_chunks", required=True, type=str, help="number of chunks to split data")
-#parser.add_argument("--route_algtm", dest="route_algtm", required=True, type=str, help="FloydWarshall or Johnsons algorithm")
+parser.add_argument("--buffer_dist", dest="buffer_dist", required=True, type=str, help="Distance in meters of buffer diameter")
+parser.add_argument("--id_closed_area", dest="id_closed_area", required=True, type=str, help="id of closed area to analize")
+parser.add_argument("--year", dest="year", required=True, type=str, help="year to analize")
+parser.add_argument("--month", dest="month", required=True, type=str, help="FloydWarshall or Johnsons algorithm")
+parser.add_argument("--day", dest="day", required=True, type=str, help="FloydWarshall or Johnsons algorithm")
+
+
+#SELECT BY LOCATION
+
+#BUFFER
+
+#SELECT BY LOCATION ON BUFFER
+
+#ISOCHRONES
+
+#RISK ASSESSMENT
+
+
+def select_markets_affected(id_closed_area, dist_buffer):
+    ''' Select markets affected by closed areas
+        input:  id_closed_area = id of closed area to analize
+                dist_buffer = distance of buffer from CCAA affected'''
+
+    #Selection by location --> CCAA in closed area aka CCAA affected
+    query_1 = consultas_sql.ccaa_affected.format(id_closed_area=id_closed_area)
+    ccaa_affected = utils.consulta_sql(database, user, password, host, port, query_1)
+    
+    #buffer of CCAA affected
+    query_2 = consultas_sql.ccaa_buffer.format(dist_buffer=dist_buffer)
+    ccaa_buffer = utils.consulta_sql(database, user, password, host, port, query_2)
+
+
+
+    markets_affected = utils.consulta_sql(database, user, password, host, port, consultas_sql.markets_affected)
+    
+    
+    query_file = open (os.path.join(path_, file), 'r')
+    query = query_file.read().format(date=date)
+    utils.run_query(query)
+
+
+
+
+    return markets_affected, ccaa_affected, ccaa_buffer
+
+
+def main(n, n_chunks):
+    start_time = time.time()
+    args = parser.parse_args()
+    id_closed_area = args.id_closed_area
+    buffer_dist = args.buffer_dist
+    select_markets_affected(id_closed_area, buffer_dist)
+
+    calculate_dpc(node, n_chunks)
+    dfUnion()
+    print('El tiempo de ejecucion fue de',
+                (time.time() - start_time),
+                'segundos.')
+    return print('proceso terminado')
+
+
+if __name__ == '__main__':
+    main()
+    #python3 calculate_dpc_nodes.py --nodes=all --route_algtm=floydwarshall  
+
 
 
 
@@ -74,20 +136,4 @@ def dfUnion():
     data_new.to_csv(pathChunks + '\\' + 'chunksJoin.csv', sep=';')    
 
 
-def main(n, n_chunks):
-    start_time = time.time()
-    args = parser.parse_args()
-    node = args.nodes
-    n_chunks = args.n_chunks
-    calculate_dpc(node, n_chunks)
-    dfUnion()
-    print('El tiempo de ejecucion fue de',
-                (time.time() - start_time),
-                'segundos.')
-    return print('proceso terminado')
-
-
-if __name__ == '__main__':
-    main()
-    #python3 calculate_dpc_nodes.py --nodes=all --route_algtm=floydwarshall  
 
