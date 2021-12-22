@@ -5,19 +5,15 @@ generic_query = '''
 
 
 #aca ver bien cual será el formato de la tabla
-ccaa_affected = f'''CREATE OR REPLACE TABLE ccaa_affected_{{id_closed_area}}_{{date}} AS ()
-                    SELECT ST_Within(a.geom, c.)
-                    FROM {{id_closed_area}} as a,
-                    {{CCAA}} as c
-                     '''
+within = f'''CREATE OR REPLACE TABLE {{output_table}} AS (
+                    SELECT ST_Within(a.geom, c.geom)
+                    FROM {{layer_1}} as a,
+                    {{ayer_2}} as c
+                    )
+                     '''                  
 
 buffer = '''
+            CREATE OR REPLACE TABLE {{output_table}} AS (
             SELECT ST_Buffer(geom)
-            FROM
-        
-
-                     '''
-
-markets_affected = '''
-
-                     '''
+            FROM {{id_closed_area}}
+         '''

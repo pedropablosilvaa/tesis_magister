@@ -18,11 +18,11 @@ import argparse
 import sql_queries.consultas_sql as consultas_sql
 
 pd.set_option('display.float_format', '{:.5f}'.format)
-database=database_param["database"]
-user=database_param["user"]
-password=database_param["password"]
-host=database_param["host"]
-port=database_param["port"]
+DATABASE=database_param["database"]
+USER=database_param["user"]
+PASSWORD=database_param["password"]
+HOST=database_param["host"]
+PORT=database_param["port"]
 
 parser = argparse.ArgumentParser(description='Preprocessing of spatial data')
 parser.add_argument("--buffer_dist", dest="buffer_dist", required=True, type=str, help="Distance in meters of buffer diameter")
@@ -45,20 +45,20 @@ parser.add_argument("--day", dest="day", required=True, type=str, help="FloydWar
 
 def select_markets_affected(id_closed_area, dist_buffer):
     ''' Select markets affected by closed areas
-        input:  id_closed_area = id of closed area to analize
-                dist_buffer = distance of buffer from CCAA affected'''
+        input:  closed_area = id of closed area to analize
+        dist_buffer = distance of buffer from CCAA affected'''
 
     #Selection by location --> CCAA in closed area aka CCAA affected
-    query_1 = consultas_sql.ccaa_affected.format(id_closed_area=id_closed_area)
-    ccaa_affected = utils.consulta_sql(database, user, password, host, port, query_1)
+    query_1 = consultas_sql.ccaa_affected.format(id_closed_area=id_closed_area, CCAA_layer = CCAA_layer)
+    ccaa_affected = utils.consulta_sql(DATABASE, USER, PASSWORD, HOST, PORT, query_1)
     
-    #buffer of CCAA affected
+    #buffer on CCAA affected
     query_2 = consultas_sql.ccaa_buffer.format(dist_buffer=dist_buffer)
-    ccaa_buffer = utils.consulta_sql(database, user, password, host, port, query_2)
+    ccaa_buffer = utils.consulta_sql(DATABASE, USER, PASSWORD, HOST, PORT, query_2)
 
 
 
-    markets_affected = utils.consulta_sql(database, user, password, host, port, consultas_sql.markets_affected)
+    markets_affected = utils.consulta_sql(DATABASE, USER, PASSWORD, HOST, PORT, consultas_sql.markets_affected)
     
     
     query_file = open (os.path.join(path_, file), 'r')
