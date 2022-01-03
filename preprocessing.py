@@ -53,8 +53,7 @@ def select_markets_affected(id_ccaa_layer, id_closed_area, dist_buffer):
                                                         closed_area_layer=id_closed_area,
                                                         buffer_dist = dist_buffer,
                                                         markets_layer = MARKET_LAYER)
-    markets_affected = utils.consulta_sql(DATABASE, USER, PASSWORD, HOST, PORT, query_markets_affecteds)
-    utils.run_query(query_markets_affecteds)
+    utils.query_sql_standard(DATABASE, USER, PASSWORD, HOST, PORT, query_markets_affecteds)
     return  
 
 
