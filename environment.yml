@@ -7,3 +7,4 @@ dependencies:
   - pandas
   - psycopg2
   - matplotlib
+  - geocoder
