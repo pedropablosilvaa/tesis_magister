@@ -57,7 +57,8 @@ def get_sii_list_enrerprise():
     #Geocoding
     start_time = time.time()
     sii = df_with_location.applymap(str)
-    sii = sii.sample(n = 20)
+    #uncomment follow line to sample df in n rows
+    #sii = sii.sample(n = 20)
     x = []
     y = []
     for i in range(len(sii)):
@@ -68,6 +69,7 @@ def get_sii_list_enrerprise():
         else:
             address = sii['Calle'].iloc[i] + ' ' + sii['Numero'].iloc[i] + ', ' + sii['Ciudad'].iloc[i] + ', ' + 'Los Lagos Region'
         
+        print(address)        
         if len(geocoder.osm(address)) != 0:
             x.append(geocoder.osm(address).osm['x'])
             y.append(geocoder.osm(address).osm['y'])
@@ -100,10 +102,10 @@ def main():
     get_sii_list_enrerprise()
     #args = parser.parse_args()
     #id_closed_area = args.id_closed_area
-    print('El tiempo total de ejecucion fue de',
+    print('Time of execution',
                 (time.time() - start_time),
-                'segundos.')
-    return print('proceso terminado')
+                'seconds.')
+    return print('Process end')
 
 
 if __name__ == '__main__':
