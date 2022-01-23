@@ -26,7 +26,7 @@ PORT=database_param["port"]
 
 parser = argparse.ArgumentParser(description='Preprocessing of spatial data')
 parser.add_argument("--buffer_dist", dest="buffer_dist", required=True, type=str, help="Distance in meters of buffer diameter")
-parser.add_argument("--id_closed_area", dest="id_closed_area", required=True, type=str, help="id of closed area to analize")
+parser.add_argument("--id_closed_area",  Ist="id_closed_area", required=True, type=str, help="id of closed area to analize")
 parser.add_argument("--id_ccaa_layer", dest="id_closed_area", required=True, type=str, help="id of closed area to analize")
 parser.add_argument("--year", dest="year", required=True, type=str, help="year to analize")
 parser.add_argument("--month", dest="month", required=True, type=str, help="FloydWarshall or Johnsons algorithm")

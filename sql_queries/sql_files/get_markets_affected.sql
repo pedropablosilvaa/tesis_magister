@@ -23,24 +23,30 @@ SELECT a.*,
 
 
 '''
-                           SELECT a.*, 
-                           ST_WITHIN(a.geom, c.geom) as intersect
-                           FROM {{ccaa_layer}} as a,
-                           {{closed_area_layer}} as c 
-                           WHERE intersect = TRUE
-                        ),
+WITH select_ccaa as (
+	SELECT DISTINCT
+		a.*
+		FROM capas_estaticas."CCAA" AS a,
+		capas_estaticas.cierre_salud AS c
+		WHERE ST_WITHIN(a.geom, c.geom) = TRUE
+),
+filter_by_region as (
+	SELECT DISTINCT 
+		a.*
+		FROM capas_estaticas."business_location" AS a,
+		capas_estaticas.region_x AS c
+		WHERE ST_DWithin(a.geom, c.geom, 1000) = TRUE
+),
 
-                        buffer_ccaa as (
-                           SELECT ST_BUFFER(geom, {{buffer_dist}})
-                           FROM select_ccaa
-                        )
+markets_affected as (
+	SELECT DISTINCT
+		a.*
+		FROM filter_by_region AS a,
+		select_ccaa AS c
+		WHERE ST_DWithin(a.geom, c.geom, 5000) = TRUE
+)
 
-                        SELECT a.*,
-                        ST_WITHIN(a.geom, c.geom) as is_affected
-                        FROM {{markets_layer}} as a,
-                        buffer_ccaa as c
-                        WHERE is_affected = TRUE
-                        ),
+select * from markets_affected
 
 
 
@@ -58,8 +64,6 @@ WITH select_ccaa as (
 	SELECT
 		ST_BUFFER(geom, 300)
 		FROM select_ccaa
-    
-
 )
 
 

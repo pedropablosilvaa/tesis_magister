@@ -1,5 +1,5 @@
 def get_query_sql(database, user, password, host, port, query):
-    '''Funcion que devuelve una query sql'''
+    '''Funcion que genera una consulta sql en la base de datos sin retornar la tabla a python'''
     #Ingreso de parametros de conexion
     con = psycopg2.connect(database = database, user = user, 
                            password = password, host = host, port = port)
