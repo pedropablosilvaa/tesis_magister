@@ -6,7 +6,7 @@
 -- Se agregan los campos de source y target para que la capa sea routable
 alter table capas_estaticas.roads_final add column source integer;
 alter table capas_estaticas.roads_final add column target integer;
-SELECT pgr_createTopology('capas_estaticas.roads_final', '0.001' ,'geom', 'id');
+SELECT pgr_createTopology('capas_estaticas.roads_final', '0.00001' ,'geom', 'id');
 
 
 
@@ -20,12 +20,14 @@ SELECT id, name, maxspeed, lanes, source, target, ST_Length(ST_Transform(geom, 3
 DROP TABLE IF EXISTS capas_estaticas.isochrone_test;
 
 CREATE TABLE capas_estaticas.isochrone_test as (
-SELECT ST_ConcaveHull(ST_Collect(geom),0.99,false) 
+SELECT ST_ConcaveHull(ST_Collect(geom),1,true) 
 FROM capas_estaticas.roads_routing as roads
-JOIN (SELECT * FROM pgr_drivingdistance('SELECT id, source, target, cost from capas_estaticas.roads_routing', 16660, 1000, false)) 
+	JOIN (SELECT  * FROM pgr_drivingdistance('SELECT id, source, target, cost from capas_estaticas.roads_routing', ARRAY[724,721], 150, false)) 
 AS route 
-ON roads.source = route.node
-);
+ON roads.id = route.edge
+GROUP BY route.from_v
+)
+	
 
 '''
 
