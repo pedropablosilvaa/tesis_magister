@@ -4,3 +4,5 @@ test.ipynb
 test.py
 /data
 sql_queries/__pycache__
+.ipynb_checkpoints/
+__pycache__/
