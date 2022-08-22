@@ -57,7 +57,7 @@ def select_markets_affected(id_ccaa_layer, id_closed_area, dist_buffer):
     return  
 
 
-def main(n, n_chunks):
+def main():
     start_time = time.time()
     args = parser.parse_args()
     id_closed_area = args.id_closed_area
