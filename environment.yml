@@ -8,3 +8,6 @@ dependencies:
   - psycopg2
   - matplotlib
   - geocoder
+  - jupyter lab
+  - openpyxl
+  - seaborn

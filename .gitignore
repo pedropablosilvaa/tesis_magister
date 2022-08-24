@@ -6,3 +6,4 @@ test.py
 sql_queries/__pycache__
 .ipynb_checkpoints/
 __pycache__/
+/.vscode
