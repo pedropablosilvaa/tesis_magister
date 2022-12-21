@@ -14,6 +14,7 @@ import argparse
 import sql_queries.consultas_sql as consultas_sql
 import geocoder
 
+#get database config
 pd.set_option('display.float_format', '{:.5f}'.format)
 DATABASE=database_param["database"]
 USER=database_param["user"]
